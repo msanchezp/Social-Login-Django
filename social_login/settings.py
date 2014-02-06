@@ -1,5 +1,8 @@
 # Django settings for social_login project.
 
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -11,8 +14,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -66,6 +69,7 @@ STATIC_ROOT = ''
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
+LOGIN_URL = '/login/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -83,7 +87,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '=vp$xzyp3apfr%=#-5pelz6tl5(9n$3ou3lof_d9z^#^y((d%!'
+SECRET_KEY = 'your-secret-key'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -121,9 +125,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'social.apps.django_app.default',
+    'home',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -156,3 +162,24 @@ LOGGING = {
         },
     }
 }
+
+
+#API KEYS SOCIAL LOGIN
+#Twitter
+SOCIAL_AUTH_TWITTER_KEY = "your-consumer-key-twitter"
+SOCIAL_AUTH_TWITTER_SECRET = "your-consumer-secret-twitter"
+
+#Facebook
+SOCIAL_AUTH_FACEBOOK_KEY = "your-app-id-facebook"
+SOCIAL_AUTH_FACEBOOK_SECRET = "your-app-secret-facebook"
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookAppOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_URL = '/login'
